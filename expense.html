@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Despesas - Contas das Princesas</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main>
+        <a href="index.html" class="back-link">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+
+        <header>
+            <h1><i class="bi bi-piggy-bank"></i> Gerenciar Despesas</h1>
+        </header>
+
+        <section class="filters-context">
+            <label for="expense-month-select">Mês:</label>
+            <select id="expense-month-select">
+                </select>
+
+            <label for="expense-year-select">Ano:</label>
+            <select id="expense-year-select">
+                </select>
+        </section>
+
+        <section class="expense-actions">
+            <button id="add-expense-btn" class="btn btn-success">
+                <i class="bi bi-plus-lg"></i> Adicionar Nova Despesa
+            </button>
+        </section>
+
+        <section class="expense-list">
+            <table id="expense-table" class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Pago Por</th>
+                        <th>Parcelas</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </section>
+    </main>
+
+    <div class="modal fade" id="expenseModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered"> 
+        <div class="modal-content">
+          
+          <div class="modal-header">
+            <h5 class="modal-title">
+                <i class="bi bi-stars"></i> Nova Despesa
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <form id="expense-form">
+              
+              <div class="mb-3">
+                <label for="expense-description" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="expense-description" placeholder="Ex: Mercado...">
+              </div>
+
+              <div class="mb-3">
+                <label for="expense-value" class="form-label">Valor (R$)</label>
+                <input type="number" class="form-control" id="expense-value" step="0.01" placeholder="0,00">
+              </div>
+
+              <div class="mb-3">
+                <label for="expense-date" class="form-label">Data</label>
+                <input type="date" class="form-control" id="expense-date">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label d-block">Quem Pagou?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="paid-by" id="paid-kelly" value="Kelly">
+                  <label class="form-check-label" for="paid-kelly">Kelly</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="paid-by" id="paid-mary" value="Mary">
+                  <label class="form-check-label" for="paid-mary">Mary</label>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="expense-installments" class="form-label">Parcelas</label>
+                <select class="form-select" id="expense-installments">
+                  <option value="1">À vista (1x)</option>
+                  <option value="2">2x</option>
+                  <option value="3">3x</option>
+                  <option value="4">4x</option>
+                  <option value="5">5x</option>
+                  <option value="6">6x</option>
+                </select>
+              </div>
+
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-success" id="save-expense-btn">Salvar Despesa</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>

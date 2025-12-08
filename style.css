@@ -1,0 +1,482 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+:root {
+    --cor-principal: #AC72E8;      /* Lavanda */
+    --cor-secundaria: #FF69BB;     /* Rosa Vibrante */
+    --cor-destaque: #F5DE78;       /* Amarelo Jasmim */
+    --cor-sucesso: #1DC2A2;        /* Verde-Mar */
+    --cor-fundo: #fafaee;          /* Branco Neve */
+    --cor-texto: #333333;          /* Cinza escuro para texto */
+
+    /* Cores de Ação Padrão (podemos manter ou mudar) */
+    --cor-perigo: #dc3545;         /* Vermelho (Excluir) */
+    --cor-aviso: #ffc107;          /* Amarelo (Editar) */
+}
+
+/* Estilos Gerais */
+body {
+    background-color: var(--cor-fundo); 
+    color: var(--cor-texto);
+    font-family: 'Nunito', sans-serif;
+}
+
+/* Centralizando o conteúdo principal */
+main {
+    max-width: 960px; /* Largura máxima do conteúdo */
+    margin: 2rem auto; /* Centraliza na página com margem no topo/baixo */
+    padding: 1rem;
+}
+
+/* Estilizando a seção dos cards no Dashboard */
+.dashboard-cards {
+    display: flex; /* ATIVA O FLEXBOX: alinha os cards lado a lado */
+    gap: 1.5rem;   /* Espaçamento entre os cards */
+    justify-content: space-around; /* Distribui o espaço entre eles */
+    margin-bottom: 2rem; /* Margem abaixo da seção dos cards */
+}
+
+.card {
+    background-color: #ffffff; /* Fundo branco para os cards */
+    padding: 1.5rem;
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave para efeito de elevação */
+    text-align: center;
+    flex: 1; /* Faz com que todos os cards tentem ocupar o mesmo espaço */
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.25rem; /* Tamanho da fonte do título do card */
+}
+
+.card p {
+    font-size: 2rem; /* Tamanho da fonte do valor do card */
+    font-weight: bold;
+    color: #007bff; /* Uma cor de destaque (azul do Bootstrap) */
+}
+.card h2 i {
+    margin-right: 0.5rem;
+ }    
+
+.filters-context {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap; /* Permite que os itens quebrem para a linha de baixo em telas pequenas */
+}
+
+.filters-context label {
+    font-weight: bold;
+}
+
+.main-actions {
+    text-align: center; /* Centraliza o conteúdo (o botão) */
+}
+
+#go-to-expenses-btn {
+    font-size: 1.25rem;
+    padding: 0.75rem 2rem;
+    border-radius: 50px; /* Deixa o botão com as bordas bem arredondadas (formato de pílula) */
+    border: none;
+    background-color: var(--cor-principal); /* Cor primária do Bootstrap */
+    color: white;
+    font-weight: bold;
+    cursor: pointer; /* Muda o cursor para a "mãozinha" ao passar o mouse */
+    transition: background-color 0.3s ease; /* Adiciona uma transição suave na cor */
+
+        /* LINHA ESSENCIAL PARA TRANSFORMAR O LINK EM BOTÃO */
+    text-decoration: none; 
+
+}
+
+#go-to-expenses-btn:hover {
+    background-color: var(--cor-secundaria);
+}
+
+/* Estilo da seção do botão de Adicionar Despesa */
+.expense-actions {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Estilos da Página de Despesas (expenses.html) --- */
+
+/* Estilizando o cabeçalho */
+header {
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between; /* Alinha o título à esquerda e a navegação à direita */
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    color: var(--cor-principal);
+}
+
+header i {
+    margin-right: 0.5rem;
+}
+
+header a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #007bff;
+    font-size: 1rem;
+}
+
+/* --- Link "Voltar" Minimalista --- */
+.back-link {
+    display: inline-flex; /* Alinha ícone e texto perfeitamente */
+    align-items: center;  /* Centraliza verticalmente */
+    gap: 0.5rem;          /* Espaço entre a seta e o texto */
+    
+    color: var(--cor-texto); /* Começa Cinza Escuro (discreto) */
+    text-decoration: none;   /* Sem sublinhado */
+    font-weight: 700;        /* Negrito para leitura fácil */
+    font-size: 1rem;
+    
+    margin-bottom: 1.5rem;   /* Espaço para afastar do cabeçalho */
+    transition: color 0.3s ease; /* Efeito suave de cor */
+}
+
+/* Quando passa o mouse, fica Roxo (Lavanda) */
+.back-link:hover {
+    color: var(--cor-principal); 
+}
+
+/* Estilizando a tabela de despesas */
+.expense-list {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#expenses-table {
+    width: 100%; /* Faz a tabela ocupar toda a largura do container */
+    border-collapse: collapse; /* Remove o espaçamento duplo entre as células */
+    margin-top: 1.5rem;
+}
+
+#expenses-table th, #expenses-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6; /* Linha sutil separando as linhas */
+}
+
+#expenses-table th {
+    font-weight: bold;
+    background-color: #f8f9fa; /* Um fundo levemente cinza para o cabeçalho da tabela */
+}
+
+/* Estilizando os botões de ação na tabela */
+.edit-btn, .delete-btn {
+    border: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.edit-btn {
+    background-color: #ffc107; /* Amarelo (Atenção/Editar) */
+}
+
+.delete-btn {
+    background-color: #dc3545; /* Vermelho (Perigo/Excluir) */
+}
+
+/* Estilo da seção do botão de Adicionar Despesa */
+.expense-actions {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Estilo específico para o botão de Adicionar Despesa */
+#add-expense-btn {
+    font-size: 1.1rem;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    border: none;
+    background-color: var(--cor-sucesso);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#add-expense-btn:hover {
+    background-color: var(--cor-secundaria); /
+}
+
+/* --- DIAGRAMAÇÃO PROFISSIONAL DA TABELA --- */
+
+.expense-list {
+    overflow-x: auto; /* Permite rolagem lateral no celular se a tabela for muito larga */
+}
+
+#expense-table {
+    width: 100%;
+    border-collapse: separate; /* Permite arredondar bordas da tabela se quiser */
+    border-spacing: 0;
+}
+
+/* Cabeçalho da Tabela */
+#expense-table thead th {
+    background-color: var(--cor-principal); /* Cabeçalho Roxo */
+    color: white;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border: none;
+    padding: 1rem;
+    white-space: nowrap; /* Cabeçalhos nunca quebram linha */
+}
+
+/* Arredonda os cantos do cabeçalho */
+#expense-table thead th:first-child { border-top-left-radius: 10px; }
+#expense-table thead th:last-child { border-top-right-radius: 10px; }
+
+/* Células do Corpo */
+#expense-table tbody td {
+    padding: 1rem;
+    vertical-align: middle; /* Alinha tudo no meio verticalmente */
+    border-bottom: 1px solid #eee;
+    color: var(--cor-texto);
+    font-size: 0.95rem;
+}
+
+/* --- LARGURAS INTELIGENTES --- */
+
+/* 1. Data (Tamanho fixo pequeno) */
+#expense-table th:nth-child(1),
+#expense-table td:nth-child(1) {
+    width: 1%; /* Ocupa só o necessário */
+    white-space: nowrap; /* Não quebra linha (ex: 30/10/2025) */
+}
+
+/* 2. Descrição (Ocupa todo o espaço que sobrar) */
+#expense-table th:nth-child(2),
+#expense-table td:nth-child(2) {
+    width: auto; 
+}
+
+/* 3. Valor (Coluna 3) */
+
+/* Configurações comuns de ESPAÇO e ALINHAMENTO (Valem para Título e Dados) */
+#expense-table th:nth-child(3),
+#expense-table td:nth-child(3) {
+    width: 1%;
+    white-space: nowrap; /* Impede quebra de linha */
+    text-align: right;   /* Alinha à direita */
+}
+
+/* Configuração SÓ dos DADOS (As linhas da tabela) */
+#expense-table td:nth-child(3) {
+    font-weight: 800;       /* Negrito */
+    color: var(--cor-texto); /* Cinza Escuro (Legibilidade) */
+}
+
+/* Configuração SÓ do TÍTULO (O cabeçalho) */
+#expense-table th:nth-child(3) {
+    color: white; /* Garante que o título "Valor" fique branco */
+}
+
+/* 4. Quem Pagou e Parcelas (Centralizados) */
+#expense-table th:nth-child(4), #expense-table td:nth-child(4),
+#expense-table th:nth-child(5), #expense-table td:nth-child(5) {
+    width: 1%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* 5. Ações (Botões) */
+#expense-table th:nth-child(6),
+#expense-table td:nth-child(6) {
+    width: 1%;
+    text-align: center;
+}
+
+/* --- Cores de Fundo dos Cards do Dashboard --- */
+
+/* Card 1: Total Geral */
+.card.general-total {
+    background-color: var(--cor-principal); /* Fundo Lavanda */
+    border-top: 4px solid var(--cor-destaque); /* Borda Amarelo Jasmim */
+    color: white; /* Define a cor do texto (do <h2>) para branco */
+}
+
+/* Card 2: Meu Total (Dinâmico) */
+.card.my-total {
+    background-color: var(--cor-secundaria); /* Fundo Rosa Vibrante */
+    border-top: 4px solid var(--cor-destaque);
+    color: white;
+}
+
+/* Card 3: Balanço Final */
+.card.balance-status {
+    background-color: var(--cor-sucesso); /* Fundo Verde-Mar */
+    border-top: 4px solid var(--cor-destaque);
+    color: white;
+}
+
+/* Regra Específica para os Valores (o <p>): 
+  Precisamos forçar o <p> (que antes era Lavanda) a ser branco também.
+*/
+.card.general-total p,
+.card.my-total p,
+.card.balance-status p {
+    color: white; 
+}
+
+/* --- Personalização dos Campos de Formulário --- */
+
+/* Quando o usuário clica para digitar (Foco) */
+.form-control:focus, 
+.form-select:focus {
+    border-color: var(--cor-principal); /* Borda Lavanda */
+    /* Cria aquele brilho suave em volta, usando a cor Lavanda com transparência */
+    box-shadow: 0 0 0 0.25rem rgba(172, 114, 232, 0.25); 
+}
+
+/* Ajuste nos Radio Buttons (Kelly/Mary) */
+.form-check-input:checked {
+    background-color: var(--cor-secundaria); /* Rosa quando marcado */
+    border-color: var(--cor-secundaria);
+}
+
+/* --- "GLAMOUR" DO MODAL (Versão Fortalecida) --- */
+
+/* 1. Espaçamento e Fundo */
+.modal-body {
+    padding: 3rem !important; /* Força muito espaço interno */
+    background-color: #fff !important;
+}
+
+/* 2. Rótulos (Labels) */
+.modal-body label {
+    color: var(--cor-principal) !important;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: block; /* Garante que ocupe a linha toda */
+}
+
+/* 3. Campos de Digitação (Tira o azul e arredonda) */
+.modal-body .form-control, 
+.modal-body .form-select {
+    border-radius: 12px !important;
+    padding: 10px 15px !important;
+    margin-bottom: 20px !important; /* Espaço embaixo de cada campo */
+    border: 1px solid #ced4da;
+}
+
+/* 4. O Foco (Quando clica no campo - Tira o brilho azul) */
+.form-control:focus, 
+.form-select:focus {
+    border-color: var(--cor-principal) !important;
+    box-shadow: 0 0 0 0.25rem rgba(172, 114, 232, 0.25) !important; /* Brilho Lavanda */
+}
+
+/* 5. Radio Buttons (As bolinhas de seleção) */
+.form-check-input:checked {
+    background-color: var(--cor-secundaria) !important; /* Rosa */
+    border-color: var(--cor-secundaria) !important;
+}
+
+/* --- ESTILIZAÇÃO DOS BOTÕES DO MODAL (Rodapé) --- */
+
+.modal-footer {
+    border-top: none; /* Sem linha divisória */
+    display: flex;
+    gap: 1rem; /* Espaço entre os botões */
+    justify-content: center; /* Centraliza os botões */
+    padding-bottom: 2rem;
+}
+
+/* Regra comum para AMBOS os botões (para ficarem do mesmo tamanho) */
+.modal-footer .btn {
+    padding: 0.8rem 2rem; /* Botões mais "gordinhos" */
+    border-radius: 50px; /* Formato Pílula (bem arredondado) */
+    font-weight: 800; /* Texto bem negrito */
+    text-transform: uppercase; /* Letras maiúsculas para mais estilo */
+    letter-spacing: 1px;
+    border: none;
+    transition: all 0.3s ease; /* Animação suave no mouse */
+}
+
+/* O Botão SALVAR (Estilo Principal) */
+#save-expense-btn {
+    background-color: var(--cor-sucesso) !important; /* Verde-Mar */
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(29, 194, 162, 0.4); /* Sombra verde suave */
+}
+
+#save-expense-btn:hover {
+    background-color: var(--cor-secundaria) !important; /* Rosa no Hover */
+    transform: translateY(-2px); /* Leve subidinha */
+}
+
+/* O Botão CANCELAR (Estilo Secundário/Outline) */
+.modal-footer .btn-secondary {
+    background-color: transparent !important; /* Fundo transparente */
+    border: 2px solid #ced4da !important; /* Borda cinza suave */
+    color: #6c757d !important; /* Texto cinza */
+    box-shadow: none !important;
+}
+
+.modal-footer .btn-secondary:hover {
+    border-color: var(--cor-perigo) !important; /* Borda Vermelha no hover */
+    color: var(--cor-perigo) !important; /* Texto Vermelho no hover */
+    background-color: #fff5f5 !important; /* Fundo levemente avermelhado */
+}
+
+/* --- CABEÇALHO DO MODAL (Cor e Ícone) --- */
+
+.modal-header {
+    background-color: var(--cor-principal) !important; /* Fundo Lavanda Forçado */
+    color: white !important; /* Texto Branco */
+    border-bottom: none; /* Remove a linha divisória */
+    /* Garante que o cabeçalho acompanhe o arredondamento do modal */
+    border-top-left-radius: calc(1rem - 1px); 
+    border-top-right-radius: calc(1rem - 1px);
+    padding: 1.5rem 2rem; /* Mais espaçoso */
+}
+
+/* Aumenta o tamanho do ícone e do título */
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Espaço entre o ícone e o texto */
+}
+
+/* AJUSTE DO BOTÃO "X" (Fechar) 
+   O Bootstrap usa um ícone preto. Este filtro inverte as cores 
+   para que ele fique BRANCO e visível no fundo roxo.
+*/
+.modal-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: 1; /* Tira a transparência para ficar bem branco */
+}
+
+/* --- CORREÇÃO GERAL DO MODAL --- */
+.modal-content {
+    border-radius: 20px !important; /* Define o arredondamento geral AQUI */
+    border: none !important;        /* Remove bordas cinzas extras */
+    overflow: hidden !important;    /* <--- O SEGREDO: Corta o excesso do cabeçalho */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important; /* Sombra bonita */
+}
