@@ -523,33 +523,101 @@ header a {
         font-size: 1.1rem; /* Diminui um pouco o título também */
     }
 
-    /* --- 3. TABELA DE DESPESAS (Expenses) --- */
-    
-    /* Diminui a fonte geral da tabela para caber mais coisa */
-    #expense-table th, 
-    #expense-table td {
-        padding: 0.5rem; /* Menos "gordura" nas células */
-        font-size: 0.8rem; /* Letra menor */
+ 
+    /* --- 3. TABELA TRANSFORMADA EM CARDS (Padrão de Mercado) --- */
+
+    /* 1. Esconde o Cabeçalho da tabela (Data, Descrição, etc) pois não cabe */
+    #expense-table thead {
+        display: none;
     }
 
-    /* ESCONDE colunas menos importantes no celular para ganhar espaço */
-    /* Esconde a coluna "Parcelas" (nth-child 5) no celular */
-    #expense-table th:nth-child(5), 
-    #expense-table td:nth-child(5) {
-        display: none; 
+    /* 2. Transforma cada LINHA (tr) em um CARD */
+    #expense-table tbody tr {
+        display: flex;       /* Habilita flexbox para organizar o conteúdo */
+        flex-wrap: wrap;     /* Permite quebrar linha dentro do card */
+        background-color: #fff;
+        margin-bottom: 1rem; /* Espaço entre os cards */
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra suave */
+        border: 1px solid #eee;
     }
 
-    /* Opcional: Se ainda estiver ruim, esconda "Quem Pagou" (nth-child 4) */
-    /* #expense-table th:nth-child(4), 
+    /* 3. Ajusta as CÉLULAS (td) para serem blocos de informação */
+    #expense-table tbody td {
+        border: none; /* Remove linhas da tabela */
+        padding: 0.2rem 0; /* Espaçamento vertical pequeno */
+        width: 100%; /* Por padrão, ocupa a linha toda */
+        font-size: 0.9rem;
+    }
+
+    /* --- REORGANIZANDO OS DADOS DENTRO DO CARD --- */
+
+    /* A. DESCRIÇÃO: Fica no topo, grande e em negrito */
+    #expense-table td:nth-child(2) {
+        order: 1; /* Força ser o primeiro item visualmente */
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--cor-principal);
+        width: 70%; /* Ocupa 70% da largura */
+    }
+
+    /* B. VALOR: Fica ao lado da descrição, alinhado à direita */
+    #expense-table td:nth-child(3) {
+        order: 2; /* Segundo item */
+        width: 30%; /* Ocupa os 30% restantes */
+        text-align: right;
+        font-size: 1.1rem;
+        font-weight: 800;
+    }
+
+    /* C. DATA: Fica embaixo, menorzinha */
+    #expense-table td:nth-child(1) {
+        order: 3;
+        width: auto;
+        margin-right: 10px;
+        color: #666;
+        font-size: 0.85rem;
+    }
+    /* Adiciona um ícone de calendário antes da data via CSS */
+    #expense-table td:nth-child(1)::before {
+        content: "📅 "; 
+    }
+
+    /* D. QUEM PAGOU: Ao lado da data */
     #expense-table td:nth-child(4) {
-        display: none; 
-    } 
-    */
+        order: 4;
+        width: auto;
+        margin-right: 10px;
+        color: #666;
+        font-size: 0.85rem;
+    }
+    #expense-table td:nth-child(4)::before {
+        content: "👤 ";
+    }
 
-    /* Ajusta os botões de ação para ficarem menores ou empilhados */
-    #expense-table .btn {
-        padding: 0.2rem 0.4rem; /* Botões menores */
-        font-size: 0.75rem;
+    /* E. PARCELAS: Ao lado de quem pagou */
+    #expense-table td:nth-child(5) {
+        order: 5;
+        width: auto;
+        color: #666;
+        font-size: 0.85rem;
+        /* Reexibe a coluna de parcelas que tínhamos escondido antes */
+        display: block !important; 
+    }
+    #expense-table td:nth-child(5)::before {
+        content: "💳 ";
+    }
+
+    /* F. BOTÕES DE AÇÃO: Ocupam a linha de baixo inteira */
+    #expense-table td:nth-child(6) {
+        order: 6;
+        width: 100%;
+        margin-top: 0.8rem;
+        padding-top: 0.8rem;
+        border-top: 1px dashed #eee !important; /* Linha pontilhada separando ações */
+        display: flex;
+        justify-content: flex-end; /* Alinha botões à direita */
     }
     
     /* --- 4. MODAL --- */
