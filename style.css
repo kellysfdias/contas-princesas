@@ -480,3 +480,81 @@ header a {
     overflow: hidden !important;    /* <--- O SEGREDO: Corta o excesso do cabeçalho */
     box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important; /* Sombra bonita */
 }
+
+/* =========================================
+   AJUSTES PARA CELULAR (Responsividade)
+   Tudo aqui dentro só funciona em telas pequenas
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    /* --- 1. FILTROS (Index e Expenses) --- */
+    /* Faz os filtros ficarem um embaixo do outro, ocupando a largura toda */
+    .filters-context, 
+    .filter-options {
+        flex-direction: column; /* Empilha verticalmente */
+        align-items: stretch;   /* Estica para ocupar 100% da largura */
+        gap: 0.5rem;            /* Diminui o espaço entre eles */
+    }
+
+    .filters-context select,
+    .filter-options select {
+        width: 100%;       /* O dropdown ocupa a tela toda */
+        margin-bottom: 1rem; /* Espaço para o próximo item */
+        padding: 10px;     /* Mais fácil de tocar com o dedo */
+    }
+
+    /* --- 2. CARDS DO DASHBOARD (Index) --- */
+    /* Empilha os cards para não ficarem espremidos */
+    .dashboard-cards {
+        flex-direction: column; /* Um card por linha */
+    }
+
+    .card {
+        margin-bottom: 1rem; /* Espaço entre os cards empilhados */
+    }
+
+    /* Diminui o texto gigante dos valores */
+    .card p {
+        font-size: 1.5rem; /* De 2rem para 1.5rem */
+    }
+    
+    .card h2 {
+        font-size: 1.1rem; /* Diminui um pouco o título também */
+    }
+
+    /* --- 3. TABELA DE DESPESAS (Expenses) --- */
+    
+    /* Diminui a fonte geral da tabela para caber mais coisa */
+    #expense-table th, 
+    #expense-table td {
+        padding: 0.5rem; /* Menos "gordura" nas células */
+        font-size: 0.8rem; /* Letra menor */
+    }
+
+    /* ESCONDE colunas menos importantes no celular para ganhar espaço */
+    /* Esconde a coluna "Parcelas" (nth-child 5) no celular */
+    #expense-table th:nth-child(5), 
+    #expense-table td:nth-child(5) {
+        display: none; 
+    }
+
+    /* Opcional: Se ainda estiver ruim, esconda "Quem Pagou" (nth-child 4) */
+    /* #expense-table th:nth-child(4), 
+    #expense-table td:nth-child(4) {
+        display: none; 
+    } 
+    */
+
+    /* Ajusta os botões de ação para ficarem menores ou empilhados */
+    #expense-table .btn {
+        padding: 0.2rem 0.4rem; /* Botões menores */
+        font-size: 0.75rem;
+    }
+    
+    /* --- 4. MODAL --- */
+    /* Remove o espaçamento exagerado no celular */
+    .modal-body {
+        padding: 1.5rem !important;
+    }
+}
