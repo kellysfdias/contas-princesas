@@ -1,144 +1,160 @@
-// --- BLOCO 1: SELEÇÃO DOS ELEMENTOS DO DASHBOARD ---
+// ======================================================
+// 1. CONFIGURAÇÃO DO SUPABASE (Usando supabaseClient)
+// ======================================================
+const supabaseUrl = 'https://mzfpluvysmhsfqaipoea.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16ZnBsdXZ5c21oc2ZxYWlwb2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUzOTkyNjYsImV4cCI6MjA4MDk3NTI2Nn0.-YUWuIiPFzvBOzsdSLbU8c3WETBMXrKfWICqBqZ8tp4'; 
+
+// Correção: Usando 'supabaseClient' para evitar conflito com a biblioteca
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// ======================================================
+// 2. SELEÇÃO DE ELEMENTOS
+// ======================================================
 const generalTotalElement = document.getElementById('general-total-value');
 const myTotalElement = document.getElementById('my-total-value');
 const balanceStatusElement = document.getElementById('balance-status-text');
 
-// Novos elementos que estamos selecionando
 const viewAsSelectElement = document.getElementById('view-as-select');
 const myTotalTitleTextElement = document.getElementById('my-total-title-text');
-
 const monthFilter = document.getElementById('month-select');
 const yearFilter = document.getElementById('year-select');
 
-// --- BLOCO 1.5: FUNÇÃO PARA POPULAR OS FILTROS DE MÊS/ANO ---
+let globalExpensesList = []; 
 
+// ======================================================
+// 3. BUSCAR DADOS (Usando supabaseClient)
+// ======================================================
+async function loadExpensesForDashboard() {
+    console.log("Dashboard: Buscando dados...");
+
+    // Usa 'supabaseClient' aqui
+    const { data, error } = await supabaseClient
+        .from('expenses')
+        .select('*');
+
+    if (error) {
+        console.error("Erro Dashboard:", error);
+        balanceStatusElement.textContent = "Erro de conexão";
+        return;
+    }
+
+    // Mapeia snake_case -> camelCase
+    globalExpensesList = data.map(item => ({
+        id: item.id,
+        description: item.description,
+        value: item.value,
+        date: item.date,
+        paidBy: item.paid_by, 
+        installments: item.installments
+    }));
+
+    updateDashboard();
+}
+
+// ======================================================
+// 4. POPULAR FILTROS
+// ======================================================
 function populateFilters() {
-    // 1. Pega a data de HOJE
+    if (!monthFilter || !yearFilter) return;
+
     const today = new Date();
-    const currentMonth = today.getMonth() + 1; // 10 (Outubro)
-    const currentYear = today.getFullYear(); // 2025
+    const currentMonth = today.getMonth() + 1; 
+    const currentYear = today.getFullYear(); 
 
-    // 2. Popula os MESES
-    const monthNames = [
-        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-    ];
+    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
+    // Meses
     for (let i = 1; i <= 12; i++) {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = monthNames[i - 1];
-        
-        if (i === currentMonth) {
-            option.selected = true;
-        }
-        
-        // USA A VARIÁVEL 'monthFilter' DO DASHBOARD
+        if (i === currentMonth) option.selected = true;
         monthFilter.appendChild(option); 
     }
 
-    // 3. Popula os ANOS
-    const startYear = currentYear - 2; // Começa 2 anos atrás (2023)
+    // Anos
+    const startYear = currentYear - 2; 
     for (let i = 0; i < 5; i++) {
         const year = startYear + i;
         const option = document.createElement('option');
         option.value = year;
         option.textContent = year;
-
-        if (year === currentYear) {
-            option.selected = true;
-        }
-
-        // USA A VARIÁVEL 'yearFilter' DO DASHBOARD
+        if (year === currentYear) option.selected = true;
         yearFilter.appendChild(option); 
     }
 }
 
-
-// --- BLOCO 2: FUNÇÃO PRINCIPAL DE ATUALIZAÇÃO ---
-// --- BLOCO 2: FUNÇÃO PRINCIPAL DE ATUALIZAÇÃO ---
+// ======================================================
+// 5. CÁLCULOS E ATUALIZAÇÃO
+// ======================================================
 function updateDashboard() {
-    
-    // --- Parte A: Ler os Dados (igual) ---
-    const expensesFromStorage = localStorage.getItem('expenses');
-    const allExpenses = expensesFromStorage ? JSON.parse(expensesFromStorage) : [];
-
-    // --- Parte B: LER OS FILTROS E FILTRAR A LISTA (NOVO!) ---
-    // 1. Lemos os valores dos filtros de Mês e Ano
     const selectedMonth = parseInt(monthFilter.value);
     const selectedYear = parseInt(yearFilter.value);
 
-    // 2. Filtramos a lista de "todas as despesas" para ter apenas as do Mês/Ano selecionados
-    const filteredExpenses = allExpenses.filter(function(expense) {
-        // Usamos a mesma lógica à prova de fuso horário da outra página
-        const dateParts = expense.date.split('-'); // ex: "2025-10-20" -> ["2025", "10", "20"]
+    // Filtra
+    const filteredExpenses = globalExpensesList.filter(function(expense) {
+        const dateParts = expense.date.split('-'); 
         const expenseYear = parseInt(dateParts[0]);
         const expenseMonth = parseInt(dateParts[1]);
-        
         return expenseMonth === selectedMonth && expenseYear === selectedYear;
     });
 
-    // --- Parte C: Cálculos (AGORA USANDO A LISTA FILTRADA) ---
-    // Todos os cálculos agora são feitos em 'filteredExpenses', não em 'allExpenses'
-
-    // 1. Total Geral (do mês filtrado)
+    // Totais
     const generalTotal = filteredExpenses.reduce((acc, expense) => acc + expense.value, 0);
 
-    // 2. Lógica do dropdown "Visualizar como"
-    const selectedView = viewAsSelectElement.value;
-    let selectedTotal = 0;
-    let selectedTitle = '';
-
-    if (selectedView === 'Kelly') {
-        selectedTotal = filteredExpenses // Usa a lista filtrada
-            .filter(expense => expense.paidBy === 'Kelly')
-            .reduce((acc, expense) => acc + expense.value, 0);
-        selectedTitle = 'Kelly Pagou';
-    } else if (selectedView === 'Mary') {
-        selectedTotal = filteredExpenses // Usa a lista filtrada
-            .filter(expense => expense.paidBy === 'Mary')
-            .reduce((acc, expense) => acc + expense.value, 0);
-        selectedTitle = 'Mary Pagou';
-    } else {
-        selectedTotal = generalTotal;
-        selectedTitle = 'Total (Mês Selecionado)';
-    }
-
-    // 3. Lógica do Balanço Final (do mês filtrado)
-    const kellyTotal = filteredExpenses // Usa a lista filtrada
+    const kellyTotal = filteredExpenses
         .filter(expense => expense.paidBy === 'Kelly')
         .reduce((acc, expense) => acc + expense.value, 0);
 
-    const maryTotal = filteredExpenses // Usa a lista filtrada
+    const maryTotal = filteredExpenses
         .filter(expense => expense.paidBy === 'Mary')
         .reduce((acc, expense) => acc + expense.value, 0);
-    
-    const fairShare = generalTotal / 2;
-    const balance = kellyTotal - fairShare;
 
-    let balanceText = '';
-    if (balance > 0) {
-        balanceText = `Mary deve R$ ${balance.toFixed(2).replace('.', ',')} para Kelly`;
-    } else if (balance < 0) {
-        balanceText = `Kelly deve R$ ${Math.abs(balance).toFixed(2).replace('.', ',')} para Mary`;
+    // Visualizar como...
+    const selectedView = viewAsSelectElement.value;
+    let viewTotal = 0;
+    let viewTitle = '';
+
+    if (selectedView === 'Kelly') {
+        viewTotal = kellyTotal;
+        viewTitle = 'Kelly Pagou';
+    } else if (selectedView === 'Mary') {
+        viewTotal = maryTotal;
+        viewTitle = 'Mary Pagou';
     } else {
-        balanceText = 'Quites!';
+        viewTotal = generalTotal;
+        viewTitle = 'Total (Mês)';
     }
 
-    // --- Parte D: Atualizar a Tela (igual) ---
+    // Balanço
+    const fairShare = generalTotal / 2;
+    const balance = kellyTotal - fairShare; 
+
+    let balanceText = '';
+    
+    if (generalTotal === 0) {
+        balanceText = "Sem gastos no mês";
+    } else if (balance > 0.01) { 
+        balanceText = `Mary deve R$ ${balance.toFixed(2).replace('.', ',')} para Kelly`;
+    } else if (balance < -0.01) {
+        balanceText = `Kelly deve R$ ${Math.abs(balance).toFixed(2).replace('.', ',')} para Mary`;
+    } else {
+        balanceText = 'Tudo Quites!';
+    }
+
+    // Desenha
     generalTotalElement.textContent = `R$ ${generalTotal.toFixed(2).replace('.', ',')}`;
-    myTotalTitleTextElement.textContent = selectedTitle; // << MUDE AQUI para usar a nova variável
-    myTotalElement.textContent = `R$ ${selectedTotal.toFixed(2).replace('.', ',')}`;
+    myTotalTitleTextElement.textContent = viewTitle;
+    myTotalElement.textContent = `R$ ${viewTotal.toFixed(2).replace('.', ',')}`;
     balanceStatusElement.textContent = balanceText;
 }
 
-// --- BLOCO 3: "OUVINTES" ---
+// ======================================================
+// 6. INICIALIZAÇÃO
+// ======================================================
+populateFilters();
+loadExpensesForDashboard();
 
-// 1. Chama as funções na ordem correta quando a página carrega
-populateFilters(); // 1º - Popula os filtros (e seleciona o mês/ano atual)
-updateDashboard(); // 2º - Atualiza os cards (já usando os filtros corretos)
-
-// 2. Chama a 'updateDashboard' TODA VEZ que o usuário mudar qualquer filtro
 viewAsSelectElement.addEventListener('change', updateDashboard);
-monthFilter.addEventListener('change', updateDashboard);
-yearFilter.addEventListener('change', updateDashboard);
+if(monthFilter) monthFilter.addEventListener('change', updateDashboard);
+if(yearFilter) yearFilter.addEventListener('change', updateDashboard);
